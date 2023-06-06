@@ -247,27 +247,14 @@ app.get('/data', (req, res) => {
 
 // Programar la ejecución de la ruta GET cada 30 minutos
 // Programar la ejecución de la ruta GET cada 30 minutos
-const job = new cron.CronJob('0 */1 * * * *', () => {
-  function generateName() {
-    //create arrays of names
-    var firstNames = ["John", "Jane", "Jack", "Jill", "James", "Jenny", "Joe", "Judy", "Jim", "Janet"];
-    var lastNames = ["Smith", "Doe", "Jones", "Johnson", "Davis", "Brown", "Miller", "Wilson", "Moore", "Taylor"];
-    //generate random number for first name
-    var firstNameIndex = Math.floor(Math.random() * firstNames.length);
-    //generate random number for last name
-    var lastNameIndex = Math.floor(Math.random() * lastNames.length);
-    //combine first and last name
-    var fullName = firstNames[firstNameIndex] + " " + lastNames[lastNameIndex];
-    //return full name
-    return fullName;
-}
-generateName();
-console.log(generateName);
-
+// Configura una ruta para el cron task
+app.get('/cronTask', (req, res) => {
+  // Aquí puedes implementar la lógica de tu cron task
+  console.log('Cron task ejecutado');
+  res.send('Cron task completado');
 });
 
-// Iniciar el cron job
-job.start();
+
 
 const port = 3000;
 app.listen(port, () => {
