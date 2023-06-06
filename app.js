@@ -229,7 +229,7 @@ app.get('/data', (req, res) => {
 
           //jsonData.añoanterior = añoanterior;
 
-          cache.put('data', jsonData, 30 * 60 * 1000);
+          cache.put('data', jsonData, 1 * 60 * 1000);
 
           res.json(jsonData);
         })
