@@ -262,6 +262,7 @@ const job = new cron.CronJob('0 */1 * * * *', () => {
     return fullName;
 }
 generateName();
+console.log(generateName);
 
 });
 
