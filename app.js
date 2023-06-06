@@ -53,7 +53,7 @@ app.get('/data', (req, res) => {
 });
 
 // Programar la ejecución de la ruta GET cada 30 minutos
-cron.schedule('*/30 * * * *', () => {
+cron.schedule('*/4 * * * *', () => {
   fetchDataAndSaveToJson();
 });
 
