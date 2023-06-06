@@ -5,10 +5,11 @@ const XLSX = require('xlsx');
 const cache = require('memory-cache');
 const cheerio = require('cheerio');
 const fs = require('fs');
+require('dotenv').config({ path: './.env' });
 
 const app = express();
 const urlagrolalibertad = 'http://www.agrolalibertad.gob.pe/index.php?q=node/152';
-const serverUrl = process.env.SERVER_URL;
+
 
 let jsonData = {
   añoactual: {},
