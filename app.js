@@ -1,5 +1,5 @@
 const express = require('express');
-const cron = require('node-cron');
+const cron = require('cron');
 const axios = require('axios');
 const XLSX = require('xlsx');
 const cache = require('memory-cache');
