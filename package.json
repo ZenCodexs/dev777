@@ -1,0 +1,22 @@
+{
+  "name": "botapitest",
+  "version": "1.0.0",
+  "description": "testsapis",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "DrX",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.1.3",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "memory-cache": "^0.2.0",
+    "node-cron": "^3.0.2",
+    "xlsx": "^0.18.5",
+    "xlsx-populate": "^1.21.0"
+  }
+}
