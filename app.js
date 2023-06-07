@@ -97,7 +97,7 @@ fastify.listen(options, (err, address) => {
 });
 
 // Obtener los datos y guardarlos en un archivo JSON
-const fetchDataAndSaveToJson = async () => {
+const fetchDataAndSaveToJson = () => {
 
     const sheetName = 'FEB';
   //const startCell = 'B7';
@@ -111,9 +111,8 @@ const fetchDataAndSaveToJson = async () => {
   const meses = months.slice(0, currentMonth + 1);
 
   //====================================================================================================
-  try {
-    const response = await axios.get(urlagrolalibertad);
-    
+  axios.get(urlagrolalibertad)
+    .then(response => {
         const html = response.data;
         const $ = cheerio.load(html);
 
@@ -136,7 +135,8 @@ const fetchDataAndSaveToJson = async () => {
         //console.log('URL del año anterior:', previousyear);
 
 
-        const response1 = await axios.get(url, { responseType: 'arraybuffer' });
+        axios.get(url, { responseType: 'arraybuffer' })
+        .then(response => {
         const workbook = XLSX.read(response.data, { type: 'buffer' });
 
         const jsonData = {
@@ -222,9 +222,9 @@ const fetchDataAndSaveToJson = async () => {
         //const endCellAñoAnterior = 'S7';
         const monthsAñoAnterior = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SET', 'OCT', 'NOV', 'DIC'];
 
-        const response2 = await axios.get(urlAñoAnterior, { responseType: 'arraybuffer' });
-        const workbookAñoAnterior = XLSX.read(response2.data, { type: 'buffer' });
-    
+        axios.get(urlAñoAnterior, { responseType: 'arraybuffer' })
+        .then(response => {
+            const workbook = XLSX.read(response.data, { type: 'buffer' });
 
 
             // Objeto para almacenar los datos de los meses
@@ -335,13 +335,25 @@ const fetchDataAndSaveToJson = async () => {
                   console.log('Archivo JSON actualizado correctamente en S3:', data.Location);
                 }
               });
-            }
- catch (error) {
-        console.error('Error:', error);
-      }
-};
-  
+            })
+            .catch(error => {
+            console.log('Error al descargar el archivo del año anterior:', error);
+           
+            });
+        })
+        .catch(error => {
+        console.log('Error al descargar el archivo actual:', error);
+        
+        });
 
+
+
+    })
+    .catch(error => {
+        console.error('Error al hacer la solicitud:', error);
+    });
+  
+};
 
 // Ejecutar la función fetchDataAndSaveToJson al iniciar el servidor
 fetchDataAndSaveToJson();
