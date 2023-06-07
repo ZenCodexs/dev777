@@ -15,11 +15,7 @@ const serverUrl = process.env.SERVER_URL;
 const bucketName = process.env.BUCKET_NAME;
 const keyName = 'data.json';
 
-const params = {
-  Bucket: bucketName,
-  Key: 'data.json',
-  Body: jsonDataString,
-};
+
 
 // En lugar de leer localmente el archivo JSON, lo descargamos de S3
 const params1 = {
@@ -308,6 +304,11 @@ const fetchDataAndSaveToJson = () => {
             cache.put('data', jsonData, 30 * 60 * 1000);
 
             const jsonDataString = JSON.stringify(jsonData, null, 2);
+            const params = {
+              Bucket: bucketName,
+              Key: 'data.json',
+              Body: jsonDataString,
+            };
 
               s3.upload(params, (err, data) => {
                 if (err) {
