@@ -78,9 +78,9 @@ fastify.get('/data', (request, reply) => {
   });
 });
 
-fastify.get('/cronTask', async (request, reply) => {
-  await fetchDataAndSaveToJson();
-  reply.send('Tarea programada ejecutada');
+fastify.get('/cronTask', (request, reply) => {
+  fetchDataAndSaveToJson();
+  //reply.send('Tarea programada ejecutada');
 });
 
 const port = 3000;
@@ -356,3 +356,4 @@ const fetchDataAndSaveToJson = () => {
 };
 
 // Ejecutar la función fetchDataAndSaveToJson al iniciar el servidor
+//fetchDataAndSaveToJson();
