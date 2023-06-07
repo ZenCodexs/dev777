@@ -15,7 +15,7 @@ const urlagrolalibertad = 'http://www.agrolalibertad.gob.pe/index.php?q=node/152
 const serverUrl = process.env.SERVER_URL;
 
 
-const bucketName = process.env.CYCLIC_BUCKET_NAME;
+const bucketName = process.env.BUCKET_NAME;
 const keyName = 'data.json';
 
 const options = {
@@ -79,16 +79,9 @@ fastify.get('/data', (request, reply) => {
 });
 
 fastify.get('/cronTask', (request, reply) => {
-  fetchDataAndSaveToJson()
-    .then(response => {
-      reply.send('Tarea programada ejecutada exitosamente');
-    })
-    .catch(error => {
-      console.error('Ocurrió un error en la tarea programada:', error);
-      reply.code(500).send('Error en la tarea programada');
-    });
+  //fetchDataAndSaveToJson();
+  reply.send('Tarea programada ejecutada');
 });
-
 
 const port = 3000;
 
@@ -100,14 +93,14 @@ fastify.listen(options, (err, address) => {
     console.error('Error al iniciar el servidor Fastify:', err);
     process.exit(1);
   }
+  fetchDataAndSaveToJson();
   console.log(`Servidor Fastify iniciado en el puerto ${port}`);
+
 });
 
-
-
+// Obtener los datos y guardarlos en un archivo JSON
 const fetchDataAndSaveToJson = () => {
-  return new Promise((resolve, reject) => {
-    // Código existente de la función fetchDataAndSaveToJson()
+
     const sheetName = 'FEB';
   //const startCell = 'B7';
   //const endCell = 'S7';
@@ -361,16 +354,7 @@ const fetchDataAndSaveToJson = () => {
     .catch(error => {
         console.error('Error al hacer la solicitud:', error);
     });
-
-    // Al finalizar exitosamente, resolver la promesa
-    resolve('La tarea programada se ejecutó exitosamente');
-
-    // En caso de error, rechazar la promesa
-    // reject(new Error('Ocurrió un error en la tarea programada'));
-  });
+  
 };
 
-
-
 // Ejecutar la función fetchDataAndSaveToJson al iniciar el servidor
-//fetchDataAndSaveToJson();
