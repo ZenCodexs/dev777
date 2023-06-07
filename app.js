@@ -333,13 +333,14 @@ const fetchDataAndSaveToJson = async () => {
               };
             
               try {
-                const data = await s3Client.send(new PutObjectCommand(params));
+                const command = new PutObjectCommand(params);
+                const data = await s3Client.send(command);
                 console.log('Archivo JSON actualizado correctamente en S3:', data.Location);
-                reply.send({ message: 'Archivo JSON actualizado correctamente en S3' });
               } catch (err) {
                 console.error('Error al cargar el archivo JSON en S3:', err);
-                reply.status(500).send({ error: 'Error al cargar el archivo JSON en S3' });
               }
+          
+              //reply.send(jsonData);
               
               })
               .catch(error => {
