@@ -15,7 +15,7 @@ const urlagrolalibertad = 'http://www.agrolalibertad.gob.pe/index.php?q=node/152
 const serverUrl = process.env.SERVER_URL;
 
 
-const bucketName = process.env.BUCKET_NAME;
+const bucketName = process.env.CYCLIC_BUCKET_NAME;
 const keyName = 'data.json';
 
 const options = {
