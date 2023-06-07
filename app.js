@@ -6,6 +6,8 @@ const cache = require('memory-cache');
 const cheerio = require('cheerio');
 const fs = require('fs');
 require('dotenv').config({ path: './.env' });
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
 
 const app = express();
 const urlagrolalibertad = 'http://www.agrolalibertad.gob.pe/index.php?q=node/152';
