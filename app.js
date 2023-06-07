@@ -78,9 +78,9 @@ fastify.get('/data', (request, reply) => {
   });
 });
 
-fastify.get('/cronTask', (request, reply) => {
-  fetchDataAndSaveToJson();
-  //reply.send('Tarea programada ejecutada');
+fastify.get('/cronTask', async (request, reply) => {
+  await fetchDataAndSaveToJson();
+  reply.send('Tarea programada ejecutada');
 });
 
 const port = 3000;
@@ -97,7 +97,7 @@ fastify.listen(options, (err, address) => {
 });
 
 // Obtener los datos y guardarlos en un archivo JSON
-const fetchDataAndSaveToJson = () => {
+const fetchDataAndSaveToJson = async () => {
 
     const sheetName = 'FEB';
   //const startCell = 'B7';
@@ -111,8 +111,9 @@ const fetchDataAndSaveToJson = () => {
   const meses = months.slice(0, currentMonth + 1);
 
   //====================================================================================================
-  axios.get(urlagrolalibertad)
-    .then(response => {
+  try {
+    const response = await axios.get(urlagrolalibertad);
+    
         const html = response.data;
         const $ = cheerio.load(html);
 
@@ -135,8 +136,7 @@ const fetchDataAndSaveToJson = () => {
         //console.log('URL del año anterior:', previousyear);
 
 
-        axios.get(url, { responseType: 'arraybuffer' })
-        .then(response => {
+        const response1 = await axios.get(url, { responseType: 'arraybuffer' });
         const workbook = XLSX.read(response.data, { type: 'buffer' });
 
         const jsonData = {
@@ -222,9 +222,9 @@ const fetchDataAndSaveToJson = () => {
         //const endCellAñoAnterior = 'S7';
         const monthsAñoAnterior = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SET', 'OCT', 'NOV', 'DIC'];
 
-        axios.get(urlAñoAnterior, { responseType: 'arraybuffer' })
-        .then(response => {
-            const workbook = XLSX.read(response.data, { type: 'buffer' });
+        const response2 = await axios.get(urlAñoAnterior, { responseType: 'arraybuffer' });
+        const workbookAñoAnterior = XLSX.read(response2.data, { type: 'buffer' });
+    
 
 
             // Objeto para almacenar los datos de los meses
@@ -335,25 +335,13 @@ const fetchDataAndSaveToJson = () => {
                   console.log('Archivo JSON actualizado correctamente en S3:', data.Location);
                 }
               });
-            })
-            .catch(error => {
-            console.log('Error al descargar el archivo del año anterior:', error);
-           
-            });
-        })
-        .catch(error => {
-        console.log('Error al descargar el archivo actual:', error);
-        
-        });
-
-
-
-    })
-    .catch(error => {
-        console.error('Error al hacer la solicitud:', error);
-    });
-  
+            }
+ catch (error) {
+        console.error('Error:', error);
+      }
 };
+  
+
 
 // Ejecutar la función fetchDataAndSaveToJson al iniciar el servidor
 fetchDataAndSaveToJson();
