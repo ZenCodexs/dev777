@@ -8,6 +8,7 @@ const fs = require('fs');
 require('dotenv').config({ path: './.env' });
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
+AWS.config.update({ region: 'us-west-2' }); 
 
 const app = express();
 const urlagrolalibertad = 'http://www.agrolalibertad.gob.pe/index.php?q=node/152';
@@ -66,7 +67,7 @@ app.get('/data', (req, res) => {
       const jsonData = JSON.parse(jsonDataString);
       res.json(jsonData);
     }
-  });
+  }).promise();
 });
 
 
@@ -318,7 +319,7 @@ const fetchDataAndSaveToJson = () => {
                 } else {
                   console.log('Archivo JSON actualizado correctamente en S3:', data.Location);
                 }
-              });
+              }).promise();
             })
             .catch(error => {
             console.log('Error al descargar el archivo del año anterior:', error);
