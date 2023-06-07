@@ -1,3 +1,4 @@
+const fastify = require('fastify')();
 const express = require('express');
 const cron = require('node-cron');
 const axios = require('axios');
