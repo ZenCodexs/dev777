@@ -97,7 +97,7 @@ fastify.listen(options, (err, address) => {
 });
 
 // Obtener los datos y guardarlos en un archivo JSON
-const fetchDataAndSaveToJson = () => {
+async function fetchDataAndSaveToJson(reply) {
 
     const sheetName = 'FEB';
   //const startCell = 'B7';
