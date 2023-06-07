@@ -11,6 +11,23 @@ const app = express();
 const urlagrolalibertad = 'http://www.agrolalibertad.gob.pe/index.php?q=node/152';
 const serverUrl = process.env.SERVER_URL;
 
+
+const bucketName = process.env.BUCKET_NAME;
+const keyName = 'data.json';
+
+const params = {
+  Bucket: bucketName,
+  Key: 'data.json',
+  Body: jsonDataString,
+};
+
+// En lugar de leer localmente el archivo JSON, lo descargamos de S3
+const params1 = {
+  Bucket: bucketName,
+  Key: 'data.json',
+};
+
+
 let jsonData = {
   añoactual: {},
   añoanterior: {}
@@ -42,12 +59,13 @@ function findCellValuePosition(sheet, targetValue) {
 
 // Definir la ruta GET para obtener los datos actualizados
 app.get('/data', (req, res) => {
-  fs.readFile('data.json', (err, data) => {
+  s3.getObject(params1, (err, data) => {
     if (err) {
-      console.error('Error al leer el archivo JSON:', err);
+      console.error('Error al descargar el archivo JSON de S3:', err);
       res.status(500).json({ error: 'Error al obtener los datos' });
     } else {
-      jsonData = JSON.parse(data);
+      const jsonDataString = data.Body.toString();
+      const jsonData = JSON.parse(jsonDataString);
       res.json(jsonData);
     }
   });
@@ -291,11 +309,11 @@ const fetchDataAndSaveToJson = () => {
 
             const jsonDataString = JSON.stringify(jsonData, null, 2);
 
-              fs.writeFile('data.json', jsonDataString, (err) => {
+              s3.upload(params, (err, data) => {
                 if (err) {
-                  console.error('Error al escribir el archivo JSON:', err);
+                  console.error('Error al cargar el archivo JSON en S3:', err);
                 } else {
-                  console.log('Archivo JSON actualizado correctamente');
+                  console.log('Archivo JSON actualizado correctamente en S3:', data.Location);
                 }
               });
             })
