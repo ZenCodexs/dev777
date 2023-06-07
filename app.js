@@ -356,4 +356,3 @@ const fetchDataAndSaveToJson = () => {
 };
 
 // Ejecutar la función fetchDataAndSaveToJson al iniciar el servidor
-fetchDataAndSaveToJson();
