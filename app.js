@@ -80,7 +80,7 @@ fastify.get('/data', (request, reply) => {
 
 fastify.get('/cronTask', (request, reply) => {
   fetchDataAndSaveToJson();
-  reply.send('Tarea programada ejecutada');
+  //reply.send('Tarea programada ejecutada');
 });
 
 const port = 3000;
