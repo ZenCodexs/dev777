@@ -7,8 +7,9 @@ const cache = require('memory-cache');
 const cheerio = require('cheerio');
 const fs = require('fs');
 require('dotenv').config({ path: './.env' });
-const { aWS, PutObjectCommand } = require("@aws-sdk/client-s3");
-const AWS = new aWS();
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+
+const s3Client = new S3Client();
 
 const app = express();
 const urlagrolalibertad = 'http://www.agrolalibertad.gob.pe/index.php?q=node/152';
@@ -67,7 +68,7 @@ fastify.get('/data', async (request, reply) => {
   };
 
   try {
-    const data = await AWS.send(new GetObjectCommand(params1));
+    const data = await s3Client.send(new GetObjectCommand(params1));
     const jsonDataString = data.Body.toString();
     const jsonData = JSON.parse(jsonDataString);
     reply.send(jsonData);
