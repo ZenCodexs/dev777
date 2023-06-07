@@ -15,6 +15,7 @@
     "cron": "^2.3.1",
     "dotenv": "^16.1.3",
     "express": "^4.18.2",
+    "fastify": "^4.17.0",
     "fs": "^0.0.1-security",
     "memory-cache": "^0.2.0",
     "node-cron": "^3.0.2",

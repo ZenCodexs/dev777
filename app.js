@@ -8,6 +8,7 @@ const fs = require('fs');
 require('dotenv').config({ path: './.env' });
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
+const fastify = require('fastify')({ logger: true })
 
 const app = express();
 const urlagrolalibertad = 'http://www.agrolalibertad.gob.pe/index.php?q=node/152';
@@ -55,8 +56,7 @@ function findCellValuePosition(sheet, targetValue) {
   return -1; // El valor no se encontró en la hoja
 }
 
-// Definir la ruta GET para obtener los datos actualizados
-app.get('/data', (req, res) => {
+fastify.get('/data', async (request, reply) => {
   s3.getObject(params1, (err, data) => {
     if (err) {
       console.error('Error al descargar el archivo JSON de S3:', err);
@@ -67,18 +67,29 @@ app.get('/data', (req, res) => {
       res.json(jsonData);
     }
   });
-});
+})
 
 
 
-app.get('/cronTask', (req, res) => {
-    fetchDataAndSaveToJson();
-});
 
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Servidor Express iniciado en el puerto ${port}`);
-});
+fastify.get('/cronTask', async (request, reply) => {
+  fetchDataAndSaveToJson();
+})
+
+
+
+
+// Run the server!
+const start = async () => {
+  try {
+    await fastify.listen({ port: 3000 });
+    console.log("fastly deployed")
+  } catch (err) {
+    fastify.log.error(err)
+    process.exit(1)
+  }
+}
+start()
 
 // Obtener los datos y guardarlos en un archivo JSON
 const fetchDataAndSaveToJson = () => {
