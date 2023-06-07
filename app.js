@@ -331,8 +331,10 @@ const fetchDataAndSaveToJson = () => {
               s3.upload(params, (err, data) => {
                 if (err) {
                   console.error('Error al cargar el archivo JSON en S3:', err);
+                  reply.code(500).send('Error al ejecutar la tarea programada');
                 } else {
                   console.log('Archivo JSON actualizado correctamente en S3:', data.Location);
+                  reply.send('Tarea programada ejecutada');
                 }
               });
             })
