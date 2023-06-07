@@ -7,7 +7,7 @@ const cache = require('memory-cache');
 const cheerio = require('cheerio');
 const fs = require('fs');
 require('dotenv').config({ path: './.env' });
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, GetObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
 
 const s3Client = new S3Client();
 
