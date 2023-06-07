@@ -18,6 +18,10 @@ const serverUrl = process.env.SERVER_URL;
 const bucketName = process.env.BUCKET_NAME;
 const keyName = 'data.json';
 
+const options = {
+  // Opciones de configuración del servidor Fastify
+  port: 3000, // Reemplaza 3000 con el puerto que desees utilizar
+};
 
 
 // En lugar de leer localmente el archivo JSON, lo descargamos de S3
@@ -80,7 +84,11 @@ fastify.get('/cronTask', (request, reply) => {
 });
 
 const port = 3000;
-fastify.listen(port, (err) => {
+
+
+
+
+fastify.listen(options, (err, address) => {
   if (err) {
     console.error('Error al iniciar el servidor Fastify:', err);
     process.exit(1);
