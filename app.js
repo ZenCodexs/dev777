@@ -48,6 +48,50 @@ function findCellValuePosition(sheet, targetValue) {
 
 fastify.get('/data', async (request, reply) => {
   try {
+
+    //=============================================================================================
+
+async function borrarContenidoJSON() {
+  try {
+    // Descargar el archivo JSON desde S3
+    const params = { Bucket: bucketName, Key: fileName };
+    const { Body } = await s3Client.send(new GetObjectCommand(params));
+    const jsonDataString = Body.toString("utf-8");
+
+    // Parsear el contenido del archivo JSON
+    let jsonData;
+    try {
+      jsonData = JSON.parse(jsonDataString);
+    } catch (parseError) {
+      console.error("Error al analizar el JSON descargado:", parseError);
+      console.log("Contenido del JSON:", jsonDataString);
+      return;
+    }
+
+    // Borrar el contenido existente en el objeto JSON
+    jsonData = {};
+
+    // Convertir el objeto JSON modificado a formato de cadena
+    const updatedJsonDataString = JSON.stringify(jsonData, null, 2);
+
+    // Sobrescribir el archivo JSON en S3 con el contenido actualizado
+    const putParams = {
+      Bucket: bucketName,
+      Key: fileName,
+      Body: updatedJsonDataString,
+      ContentType: "application/json",
+    };
+    await s3Client.send(new PutObjectCommand(putParams));
+
+    console.log("Contenido del archivo JSON borrado exitosamente.");
+  } catch (error) {
+    console.error("Error al borrar el contenido del archivo JSON:", error);
+  }
+}
+
+borrarContenidoJSON();
+
+    //=============================================================================================
     const params = {
       Bucket: bucketName,
       Key: 'data.json',
