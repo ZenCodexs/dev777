@@ -53,6 +53,7 @@ fastify.get('/data', async (request, reply) => {
 
 async function borrarContenidoJSON() {
   try {
+    const fileName = "data.json";
     // Descargar el archivo JSON desde S3
     const params = { Bucket: bucketName, Key: fileName };
     const { Body } = await s3Client.send(new GetObjectCommand(params));
