@@ -8,7 +8,6 @@ const fs = require('fs');
 require('dotenv').config({ path: './.env' });
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
-const fastify = require('fastify')({ logger: true })
 
 const app = express();
 const urlagrolalibertad = 'http://www.agrolalibertad.gob.pe/index.php?q=node/152';
@@ -56,40 +55,37 @@ function findCellValuePosition(sheet, targetValue) {
   return -1; // El valor no se encontró en la hoja
 }
 
-fastify.get('/data', async (request, reply) => {
+fastify.get('/data', (request, reply) => {
+  const params1 = {
+    Bucket: bucketName,
+    Key: 'data.json',
+  };
+
   s3.getObject(params1, (err, data) => {
     if (err) {
       console.error('Error al descargar el archivo JSON de S3:', err);
-      res.status(500).json({ error: 'Error al obtener los datos' });
+      reply.status(500).send({ error: 'Error al obtener los datos' });
     } else {
       const jsonDataString = data.Body.toString();
       const jsonData = JSON.parse(jsonDataString);
-      res.json(jsonData);
+      reply.send(jsonData);
     }
   });
-})
+});
 
-
-
-
-fastify.get('/cronTask', async (request, reply) => {
+fastify.get('/cronTask', (request, reply) => {
   fetchDataAndSaveToJson();
-})
+  reply.send('Tarea programada ejecutada');
+});
 
-
-
-
-// Run the server!
-const start = async () => {
-  try {
-    await fastify.listen({ port: 3000 });
-    console.log("fastly deployed")
-  } catch (err) {
-    fastify.log.error(err)
-    process.exit(1)
+const port = 3000;
+fastify.listen(port, (err) => {
+  if (err) {
+    console.error('Error al iniciar el servidor Fastify:', err);
+    process.exit(1);
   }
-}
-start()
+  console.log(`Servidor Fastify iniciado en el puerto ${port}`);
+});
 
 // Obtener los datos y guardarlos en un archivo JSON
 const fetchDataAndSaveToJson = () => {
