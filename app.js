@@ -79,7 +79,7 @@ fastify.get('/data', (request, reply) => {
 });
 
 fastify.get('/cronTask', (request, reply) => {
-  //fetchDataAndSaveToJson();
+  fetchDataAndSaveToJson();
   reply.send('Tarea programada ejecutada');
 });
 
@@ -93,7 +93,7 @@ fastify.listen(options, (err, address) => {
     console.error('Error al iniciar el servidor Fastify:', err);
     process.exit(1);
   }
-  fetchDataAndSaveToJson();
+ 
   console.log(`Servidor Fastify iniciado en el puerto ${port}`);
 
 });
@@ -101,7 +101,7 @@ fastify.listen(options, (err, address) => {
 // Obtener los datos y guardarlos en un archivo JSON
 const fetchDataAndSaveToJson = () => {
 
-    const sheetName = 'FEB';
+  const sheetName = 'FEB';
   //const startCell = 'B7';
   //const endCell = 'S7';
   const currentDate = new Date();
